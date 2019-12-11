@@ -1,8 +1,17 @@
+
+/*
+ * Author:        BinaryFour
+ * Description:   Basic Library for Arduino LCD screen;
+ *
+ */
+
+
+
 #include "B4_LCD.h"
 
 
 
-const static byte B4Lcd::CUSTOM_CHARS[1][8] = {
+const static byte B4Lcd::CUSTOM_CHARS[3][8] = {
   {
     B00100,
     B10110,
@@ -12,10 +21,32 @@ const static byte B4Lcd::CUSTOM_CHARS[1][8] = {
     B01101,
     B10110,
     B00100
+  },
+  {
+	B00000,
+	B00000,
+	B00000,
+	B00000,
+	B11111,
+    B11111,
+	B11111,
+	B11111
+  },
+  {
+	B11111,
+    B11111,
+	B11111,
+	B11111,
+	B00000,
+	B00000,
+	B00000,
+	B00000
   }
 };
 
 const static byte B4Lcd::CHAR_BLOCK = (byte) 255;
+const static byte B4Lcd::CHAR_BLOCK_HALF_BOTTOM = (byte) 1;
+const static byte B4Lcd::CHAR_BLOCK_HALF_TOP = (byte) 2;
 const static byte B4Lcd::CHAR_BLUETOOTH = (byte) 0;
 
 B4Lcd::B4Lcd(LiquidCrystal& lcd) : _lcd(lcd) {}
@@ -89,3 +120,4 @@ void B4Lcd::showLoading(String str, char loadChar) {
 void B4Lcd::fadeFullScreen() {
   
 }
+

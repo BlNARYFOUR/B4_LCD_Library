@@ -1,3 +1,12 @@
+
+/*
+ * Author:        BinaryFour
+ * Description:   Basic Library for Arduino LCD screen;
+ *
+ */
+
+
+
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
@@ -5,8 +14,10 @@
 
 class B4Lcd {
   public:
-    const static byte CUSTOM_CHARS[1][8];
+    const static byte CUSTOM_CHARS[3][8];
 	const static byte CHAR_BLOCK;
+	const static byte CHAR_BLOCK_HALF_BOTTOM;
+	const static byte CHAR_BLOCK_HALF_TOP;
 	const static byte CHAR_BLUETOOTH;
 	
     B4Lcd(LiquidCrystal& lcd);  
