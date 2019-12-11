@@ -1,0 +1,13 @@
+{
+  "name": "B4Lcd",
+  "keywords": "communication, lcd",
+  "description": "Basic LCD Library to work with Arduino LCD",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/BlNARYFOUR/B4_LCD_Library.git"
+  },
+  "version": "0.0.1",
+  "frameworks": "arduino",
+  "platforms": "*"
+}
