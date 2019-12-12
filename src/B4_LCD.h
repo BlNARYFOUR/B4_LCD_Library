@@ -5,7 +5,8 @@
  *
  */
 
-
+#ifndef B4_LCD_h
+#define B4_LCD_h
 
 #include <Arduino.h>
 #include <LiquidCrystal.h>
@@ -31,6 +32,8 @@ class B4Lcd {
 	void fadeFullScreen();
 	
   private:
-    LiquidCrystal& _lcd;
+    LiquidCrystal _lcd;
 };
+
+#endif
 
