@@ -15,24 +15,35 @@
 
 class B4Lcd {
   public:
-    const static byte CUSTOM_CHARS[3][8];
+    const static byte CUSTOM_CHARS[][8];
 	const static byte CHAR_BLOCK;
 	const static byte CHAR_BLOCK_HALF_BOTTOM;
 	const static byte CHAR_BLOCK_HALF_TOP;
 	const static byte CHAR_BLUETOOTH;
 	
     B4Lcd(LiquidCrystal& lcd);  
-    void loadCustomChars();
-	void init();
-	void clearLine(bool top);
+	B4Lcd(uint8_t rs, uint8_t enable, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+	B4Lcd(uint8_t rs, uint8_t rw, uint8_t enable, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+    B4Lcd(uint8_t rs, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+	B4Lcd(uint8_t rs, uint8_t rw, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+	void begin(uint16_t cols, uint16_t rows);
+	
+	LiquidCrystal& getLiquidCrystal();
+	void loadCustomChars();
+	void init(uint16_t cols = 16, uint16_t rows = 2);
+	void clearLine(uint16_t line);
 	void showPaddingLeft(String str);
 	void showPaddingRight(String str);
+	void format(String str, char toReplace, char replacedBy);
+	void formatCenter(uint16_t row, String str, char toReplace, char replacedBy);
+	void center(String str, uint16_t row);
 	void showLoading(String str, char loadChar, char customChar);
-	void showLoading(String str, char loadChar);
+	void showLoading(uint16_t row, char loadChar, uint16_t delay);
 	void fadeFullScreen();
 	
   private:
     LiquidCrystal _lcd;
+	uint16_t _cols = -1, _rows = -1;
 };
 
 #endif
