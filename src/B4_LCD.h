@@ -17,8 +17,6 @@ class B4Lcd {
   public:
     const static byte CUSTOM_CHARS[][8];
 	const static byte CHAR_BLOCK;
-	const static byte CHAR_BLOCK_HALF_BOTTOM;
-	const static byte CHAR_BLOCK_HALF_TOP;
 	const static byte CHAR_BLUETOOTH;
 	
     B4Lcd(LiquidCrystal& lcd);  
@@ -31,19 +29,18 @@ class B4Lcd {
 	LiquidCrystal& getLiquidCrystal();
 	void loadCustomChars();
 	void init(uint16_t cols = 16, uint16_t rows = 2);
-	void clearLine(uint16_t line);
+	void clearRow(uint16_t row);
+	void clearAnimate(uint16_t _delay);
 	void showPaddingLeft(String str);
 	void showPaddingRight(String str);
 	void format(String str, char toReplace, char replacedBy);
 	void formatCenter(uint16_t row, String str, char toReplace, char replacedBy);
 	void center(String str, uint16_t row);
-	void showLoading(String str, char loadChar, char customChar);
-	void showLoading(uint16_t row, char loadChar, uint16_t delay);
-	void fadeFullScreen();
+	void showLoading(uint16_t row, char loadChar, uint16_t _delay, bool clear = true, bool rightToLeft = false);
 	
   private:
     LiquidCrystal _lcd;
-	uint16_t _cols = -1, _rows = -1;
+	uint16_t _cols = 0, _rows = 0;
 };
 
 #endif

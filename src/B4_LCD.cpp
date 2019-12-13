@@ -25,8 +25,6 @@ const static byte B4Lcd::CUSTOM_CHARS[][8] = {
 };
 
 const static byte B4Lcd::CHAR_BLOCK = (byte) 255;
-const static byte B4Lcd::CHAR_BLOCK_HALF_BOTTOM = (byte) 1;
-const static byte B4Lcd::CHAR_BLOCK_HALF_TOP = (byte) 2;
 const static byte B4Lcd::CHAR_BLUETOOTH = (byte) 0;
 
 B4Lcd::B4Lcd(LiquidCrystal& lcd) : _lcd(lcd) {}
@@ -54,9 +52,30 @@ void B4Lcd::init(uint16_t cols = 16, uint16_t rows = 2) {
 	loadCustomChars();
 }
 
-void B4Lcd::clearLine(uint16_t line) {
-  _lcd.setCursor(0, line);
+void B4Lcd::clearRow(uint16_t row) {
+  _lcd.setCursor(0, row);
   _lcd.print("                ");
+}
+
+void B4Lcd::clearAnimate(uint16_t _delay) {
+	for(uint16_t i = 0; i < _cols / 2 + 1; i++) {
+		delay(_delay);
+		for(uint16_t j = 0; j < _rows; j++) {
+			_lcd.setCursor(i, j);
+			_lcd.write(CHAR_BLOCK);
+			_lcd.setCursor(_cols - i - 1, j);
+			_lcd.write(CHAR_BLOCK);
+		}
+	}
+	for(uint16_t i = 0; i < _cols / 2 + 1; i++) {
+		delay(_delay);
+		for(uint16_t j = 0; j < _rows; j++) {
+			_lcd.setCursor(i, j);
+			_lcd.write(' ');
+			_lcd.setCursor(_cols - i - 1, j);
+			_lcd.write(' ');
+		}
+	}
 }
 
 void B4Lcd::showPaddingLeft(String str) {
@@ -104,29 +123,14 @@ void B4Lcd::center(String str, uint16_t row) {
 	showPaddingRight(str);
 }
 
-void B4Lcd::showLoading(String str, char loadChar, char customChar) {
-  unsigned short index = str.indexOf('@');
-  _lcd.clear();
-  showPaddingLeft(str);
-  _lcd.print(str.substring(0, index));
-  _lcd.write(customChar);
-  _lcd.print(str.substring(index + 1));
-  showPaddingRight(str);
-}
-
-void B4Lcd::showLoading(uint16_t row, char loadChar, uint16_t _delay) {
-  //_lcd.home();
-  clearLine(row);
-  delay(_delay);
-  _lcd.setCursor(0, 1);
+void B4Lcd::showLoading(uint16_t row, char loadChar, uint16_t _delay, bool clear = true, bool rightToLeft = false) {
+	if(clear) clearRow(row);
+	_lcd.setCursor(0, row);
   
-  for(int i = 0; i < _cols; i++) {
-    _lcd.write(loadChar);
-    delay(_delay);
-  }
-}
-
-void B4Lcd::fadeFullScreen() {
-  
+	for(uint16_t i = 0; i < _cols; i++) {
+		if(rightToLeft) _lcd.setCursor(_cols - i - 1, row);
+		delay(_delay);
+		_lcd.write(loadChar);
+	}
 }
 
