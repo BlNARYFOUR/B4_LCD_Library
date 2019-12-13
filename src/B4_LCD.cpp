@@ -12,6 +12,7 @@
 
 
 const static byte B4Lcd::CUSTOM_CHARS[][8] = {
+  // CHAR_BLUETOOTH
   {
     B00100,
     B10110,
@@ -21,11 +22,192 @@ const static byte B4Lcd::CUSTOM_CHARS[][8] = {
     B01101,
     B10110,
     B00100
+  },
+  // CHAR_WIFI
+  {
+	B00000,
+	B01110,
+	B10001,
+	B00100,
+	B01010,
+	B00000,
+	B00100,
+	B00000
+  },
+  // CHAR_GPS
+  {
+	B00000,
+	B01110,
+	B10001,
+	B10101,
+	B10001,
+	B01010,
+	B00100,
+	B00000
+  },
+  // CHAR_LOCK
+  {
+	B00000,
+	B01110,
+	B10001,
+	B10001,
+	B11111,
+	B11111,
+	B11111,
+	B00000
+  },
+  // CHAR_BATTERY
+  {
+	B01110,
+	B11111,
+	B11111,
+	B11111,
+	B11111,
+	B11111,
+	B11111,
+	B11111
+  },
+  // CHAR_FONT_UP
+  {
+	B11111,
+	B11111,
+	B00000,
+	B00000,
+	B00000,
+	B00000,
+	B00000,
+	B00000
+  },
+  // CHAR_FONT_DOWN
+  {
+	B00000,
+	B00000,
+	B00000,
+	B00000,
+	B00000,
+	B00000,
+	B11111,
+	B11111
+  },
+  // CHAR_FONT_DUAL
+  {
+	B11111,
+	B11111,
+	B00000,
+	B00000,
+	B00000,
+	B00000,
+	B11111,
+	B11111
+  },
+  // CHAR_LOCK_UNLOCKED
+  {
+	B00000,
+	B01110,
+	B10001,
+	B10000,
+	B11111,
+	B11111,
+	B11111,
+	B00000
+  },
+  // CHAR_BATTERY_5
+  {
+	B01110,
+	B10001,
+	B11111,
+	B11111,
+	B11111,
+	B11111,
+	B11111,
+	B11111
+  },
+  // CHAR_BATTERY_4
+  {
+	B01110,
+	B10001,
+	B10001,
+	B11111,
+	B11111,
+	B11111,
+	B11111,
+	B11111
+  },
+  // CHAR_BATTERY_3
+  {
+	B01110,
+	B10001,
+	B10001,
+	B10001,
+	B11111,
+	B11111,
+	B11111,
+	B11111
+  },
+  // CHAR_BATTERY_2
+  {
+	B01110,
+	B10001,
+	B10001,
+	B10001,
+	B10001,
+	B11111,
+	B11111,
+	B11111
+  },
+  // CHAR_BATTERY_1
+  {
+	B01110,
+	B10001,
+	B10001,
+	B10001,
+	B10001,
+	B10001,
+	B11111,
+	B11111
+  },
+  // CHAR_BATTERY_0
+  {
+	B01110,
+	B10001,
+	B10001,
+	B10001,
+	B10001,
+	B10001,
+	B10001,
+	B11111
+  },
+  // CHAR_BATTERY_CHARGING
+  {
+	B01110,
+	B11111,
+	B10101,
+	B10001,
+	B11011,
+	B11011,
+	B11111,
+	B11111
   }
 };
 
 const static byte B4Lcd::CHAR_BLOCK = (byte) 255;
+
 const static byte B4Lcd::CHAR_BLUETOOTH = (byte) 0;
+const static byte B4Lcd::CHAR_WIFI = (byte) 1;
+const static byte B4Lcd::CHAR_GPS = (byte) 2;
+const static byte B4Lcd::CHAR_LOCK = (byte) 3;
+const static byte B4Lcd::CHAR_BATTERY = (byte) 4;
+const static byte B4Lcd::CHAR_FONT_UP = (byte) 5;
+const static byte B4Lcd::CHAR_FONT_DOWN = (byte) 6;
+const static byte B4Lcd::CHAR_FONT_DUAL = (byte) 7;
+const static byte B4Lcd::CHAR_LOCK_UNLOCKED = (byte) 8;
+const static byte B4Lcd::CHAR_BATTERY_5 = (byte) 9;
+const static byte B4Lcd::CHAR_BATTERY_4 = (byte) 10;
+const static byte B4Lcd::CHAR_BATTERY_3 = (byte) 11;
+const static byte B4Lcd::CHAR_BATTERY_2 = (byte) 12;
+const static byte B4Lcd::CHAR_BATTERY_1 = (byte) 13;
+const static byte B4Lcd::CHAR_BATTERY_0 = (byte) 14;
+const static byte B4Lcd::CHAR_BATTERY_CHARGING = (byte) 15;
 
 B4Lcd::B4Lcd(LiquidCrystal& lcd) : _lcd(lcd) {}
 B4Lcd::B4Lcd(uint8_t rs, uint8_t enable, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7) : _lcd(rs, enable, d4, d5, d6, d7) {}
@@ -39,10 +221,10 @@ void B4Lcd::begin(uint16_t cols, uint16_t rows) {
 	_lcd.begin(cols, rows);
 }
 
-LiquidCrystal& B4Lcd::getLiquidCrystal() { return _lcd; };
+LiquidCrystal& B4Lcd::super() { return _lcd; };
 
 void B4Lcd::loadCustomChars() {
-  for(short i = 0; i < sizeof(B4Lcd::CUSTOM_CHARS)/sizeof(*B4Lcd::CUSTOM_CHARS); i++) {
+  for(short i = 0; i < sizeof(B4Lcd::CUSTOM_CHARS)/sizeof(*B4Lcd::CUSTOM_CHARS) && i < 8; i++) {
     _lcd.createChar(i, B4Lcd::CUSTOM_CHARS[i]);
   }
 }
@@ -50,6 +232,13 @@ void B4Lcd::loadCustomChars() {
 void B4Lcd::init(uint16_t cols = 16, uint16_t rows = 2) {
 	begin(cols, rows);
 	loadCustomChars();
+}
+
+void B4Lcd::showAllCustomChars(uint16_t col, uint16_t row) {
+  _lcd.setCursor(col, row);
+  for(uint8_t i = 0; i < 8; i++) {
+    _lcd.write((byte) i);
+  }
 }
 
 void B4Lcd::clearRow(uint16_t row) {
@@ -132,5 +321,124 @@ void B4Lcd::showLoading(uint16_t row, char loadChar, uint16_t _delay, bool clear
 		delay(_delay);
 		_lcd.write(loadChar);
 	}
+}
+
+void B4Lcd::fontCenter(uint16_t num, uint16_t maxDigits, uint16_t row) {
+	font(num, maxDigits, (_cols - maxDigits * 3 - (maxDigits - 1) * 2) / 2, row);
+}
+
+void B4Lcd::font(uint16_t num, uint16_t maxDigits, uint16_t col, uint16_t row) {
+	uint16_t centi = 1;
+	
+	while (0 < num / centi) {
+		centi *= 10;
+	}
+	
+	do {
+		centi /= 10;
+		uint8_t digit = num / centi;
+		num -= digit * centi;
+		font(digit, col, row);
+		col += 5;
+	} while (0 < centi); 
+}
+
+void B4Lcd::write(byte b, uint8_t col, uint8_t row) {
+	_lcd.setCursor(col, row);
+	if(0 <= col && col < _cols && 0 <= row && row < _rows) _lcd.write(b);
+}
+
+void B4Lcd::font(uint8_t digit, const uint8_t &col, const uint8_t &row) {
+	_lcd.setCursor(col, row);
+	
+	switch(digit) {
+		case 0:
+			write(CHAR_BLOCK, col, row);
+			write(CHAR_FONT_UP, col + 1, row);
+			write(CHAR_BLOCK, col + 2, row);
+			write(CHAR_BLOCK, col, row + 1);
+			write(CHAR_FONT_DOWN, col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		case 1:
+			write(' ', col, row);
+			write(' ', col + 1, row);
+			write(CHAR_BLOCK, col + 2, row);
+			write(' ', col, row + 1);
+			write(' ', col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		case 2:
+			write(CHAR_FONT_DUAL, col, row);
+			write(CHAR_FONT_DUAL, col + 1, row);
+			write(CHAR_BLOCK, col + 2, row);
+			write(CHAR_BLOCK, col, row + 1);
+			write(CHAR_FONT_DUAL, col + 1, row + 1);
+			write(CHAR_FONT_DUAL, col + 2, row + 1);
+			break;
+		case 3:
+			write(CHAR_FONT_DUAL, col, row);
+			write(CHAR_FONT_DUAL, col + 1, row);
+			write(CHAR_BLOCK, col + 2, row);
+			write(CHAR_FONT_DUAL, col, row + 1);
+			write(CHAR_FONT_DUAL, col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		case 4:
+			write(CHAR_BLOCK, col, row);
+			write(CHAR_FONT_DOWN, col + 1, row);
+			write(CHAR_BLOCK, col + 2, row);
+			write(CHAR_FONT_UP, col, row + 1);
+			write(CHAR_FONT_UP, col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		case 5:
+			write(CHAR_BLOCK, col, row);
+			write(CHAR_FONT_DUAL, col + 1, row);
+			write(CHAR_FONT_DUAL, col + 2, row);
+			write(CHAR_FONT_DUAL, col, row + 1);
+			write(CHAR_FONT_DUAL, col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		case 6:
+			write(CHAR_BLOCK, col, row);
+			write(CHAR_FONT_DUAL, col + 1, row);
+			write(CHAR_FONT_DUAL, col + 2, row);
+			write(CHAR_BLOCK, col, row + 1);
+			write(CHAR_FONT_DUAL, col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		case 7:
+			write(CHAR_FONT_UP, col, row);
+			write(CHAR_FONT_UP, col + 1, row);
+			write(CHAR_BLOCK, col + 2, row);
+			write(' ', col, row + 1);
+			write(' ', col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		case 8:
+			write(CHAR_BLOCK, col, row);
+			write(CHAR_FONT_DUAL, col + 1, row);
+			write(CHAR_BLOCK, col + 2, row);
+			write(CHAR_BLOCK, col, row + 1);
+			write(CHAR_FONT_DUAL, col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		case 9:
+			write(CHAR_BLOCK, col, row);
+			write(CHAR_FONT_DUAL, col + 1, row);
+			write(CHAR_BLOCK, col + 2, row);
+			write(CHAR_FONT_DUAL, col, row + 1);
+			write(CHAR_FONT_DUAL, col + 1, row + 1);
+			write(CHAR_BLOCK, col + 2, row + 1);
+			break;
+		default:
+			break;
+	}
+	
+	write(' ', col + 3, row);
+	write(' ', col + 4, row);
+	write(' ', col + 3, row + 1);
+	write(' ', col + 4, row + 1);
 }
 
