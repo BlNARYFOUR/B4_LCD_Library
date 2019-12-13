@@ -27,6 +27,7 @@ class B4Lcd {
 	const static byte CHAR_FONT_UP;
 	const static byte CHAR_FONT_DOWN;
 	const static byte CHAR_FONT_DUAL;
+	
 	const static byte CHAR_LOCK_UNLOCKED;
 	const static byte CHAR_BATTERY_5;
 	const static byte CHAR_BATTERY_4;
@@ -35,6 +36,9 @@ class B4Lcd {
 	const static byte CHAR_BATTERY_1;
 	const static byte CHAR_BATTERY_0;
 	const static byte CHAR_BATTERY_CHARGING;
+	const static byte CHAR_LOCK_BIG_SIDE_LEFT;
+	const static byte CHAR_LOCK_BIG_SIDE_RIGHT;
+	const static byte CHAR_LOCK_BIG_SIDE_UNLOCKED;
 	
     B4Lcd(LiquidCrystal& lcd);  
 	B4Lcd(uint8_t rs, uint8_t enable, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
@@ -59,6 +63,9 @@ class B4Lcd {
 	void font(uint16_t num, uint16_t maxDigits, uint16_t col, uint16_t row);
 	void write(byte b, uint8_t col, uint8_t row);
 	void font(uint8_t digit, const uint8_t &col, const uint8_t &row);
+	void replaceCustomChar(char toReplace, char replaceBy);
+	void toggleBigLockFont();
+	void printBigLock(bool locked = true);
 	
   private:
     LiquidCrystal _lcd;

@@ -187,6 +187,39 @@ const static byte B4Lcd::CUSTOM_CHARS[][8] = {
 	B11011,
 	B11111,
 	B11111
+  },
+  // CHAR_LOCK_BIG_SIDE_LEFT
+  {
+	B00011,
+	B00111,
+	B00110,
+	B00110,
+	B00110,
+	B00110,
+	B00110,
+	B00110
+  },
+  // CHAR_LOCK_BIG_SIDE_RIGHT
+  {
+	B11000,
+	B11100,
+	B01100,
+	B01100,
+	B01100,
+	B01100,
+	B01100,
+	B01100
+  },
+  // CHAR_LOCK_BIG_SIDE_UNLOCKED
+  {
+	B11000,
+	B11100,
+	B01100,
+	B01100,
+	B00000,
+	B00000,
+	B00000,
+	B00000
   }
 };
 
@@ -208,6 +241,9 @@ const static byte B4Lcd::CHAR_BATTERY_2 = (byte) 12;
 const static byte B4Lcd::CHAR_BATTERY_1 = (byte) 13;
 const static byte B4Lcd::CHAR_BATTERY_0 = (byte) 14;
 const static byte B4Lcd::CHAR_BATTERY_CHARGING = (byte) 15;
+const static byte B4Lcd::CHAR_LOCK_BIG_SIDE_LEFT = (byte) 16;
+const static byte B4Lcd::CHAR_LOCK_BIG_SIDE_RIGHT = (byte) 17;
+const static byte B4Lcd::CHAR_LOCK_BIG_SIDE_UNLOCKED = (byte) 18;
 
 B4Lcd::B4Lcd(LiquidCrystal& lcd) : _lcd(lcd) {}
 B4Lcd::B4Lcd(uint8_t rs, uint8_t enable, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7) : _lcd(rs, enable, d4, d5, d6, d7) {}
@@ -440,5 +476,40 @@ void B4Lcd::font(uint8_t digit, const uint8_t &col, const uint8_t &row) {
 	write(' ', col + 4, row);
 	write(' ', col + 3, row + 1);
 	write(' ', col + 4, row + 1);
+}
+
+void B4Lcd::replaceCustomChar(char toReplace, char replaceBy) {
+	_lcd.createChar((uint16_t)toReplace, B4Lcd::CUSTOM_CHARS[(uint16_t)replaceBy]);
+}
+
+void B4Lcd::toggleBigLockFont() {
+	static bool lockActive = false;
+	if(lockActive) {
+		replaceCustomChar(CHAR_FONT_DOWN, CHAR_FONT_DOWN);
+		replaceCustomChar(CHAR_FONT_DUAL, CHAR_FONT_DUAL);
+		replaceCustomChar(CHAR_LOCK, CHAR_LOCK);
+	}
+	else {
+		replaceCustomChar(CHAR_FONT_DOWN, CHAR_LOCK_BIG_SIDE_LEFT);
+		replaceCustomChar(CHAR_FONT_DUAL, CHAR_LOCK_BIG_SIDE_RIGHT);
+		replaceCustomChar(CHAR_LOCK, CHAR_LOCK_BIG_SIDE_UNLOCKED);
+	}
+	lockActive = !lockActive;
+}
+
+void B4Lcd::printBigLock(bool locked = true) {
+	uint16_t col = (_cols - 4) / 2;
+	uint16_t row = (_rows - 2) / 2;
+	write(CHAR_FONT_DOWN, col, row);
+	write(CHAR_FONT_UP, col + 1, row);
+	write(CHAR_FONT_UP, col + 2, row);
+	if(locked)
+		write(CHAR_FONT_DUAL, col + 3, row);
+	else
+		write(CHAR_LOCK, col + 3, row);
+	write(CHAR_BLOCK, col, row + 1);
+	write(CHAR_BLOCK, col + 1, row + 1);
+	write(CHAR_BLOCK, col + 2, row + 1);
+	write(CHAR_BLOCK, col + 3, row + 1);
 }
 
