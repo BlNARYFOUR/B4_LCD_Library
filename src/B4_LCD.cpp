@@ -378,14 +378,19 @@ void B4Lcd::font(uint16_t num, uint16_t maxDigits, uint16_t col, uint16_t row) {
 	
 	while (0 < num / centi) {
 		centi *= 10;
-		digits++;
+		maxDigits--;
 	}
 	
-	do {
-		font((byte)0, col, row);
-		col += 5;
-	} while (0 < --digits); 
+	if(0 < maxDigits) {
+		digits = maxDigits;
+	}
 	
+	if(0 < digits) { 
+		do {
+			font((byte)0, col, row);
+			col += 5;
+		} while (0 < --digits); 
+	}
 	do {
 		centi /= 10;
 		uint8_t digit = num / centi;
